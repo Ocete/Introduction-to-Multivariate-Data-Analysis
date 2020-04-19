@@ -1,0 +1,72 @@
+---
+title: "hw6 p3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+For fractions:
+```{r}
+library(MASS)
+```
+
+## R Markdown
+
+```{r}
+#import data
+data <- read.table("T1-5.DAT")
+
+#set up X
+X <- as.matrix(data)[,1:7]
+colnames(X) <- c('Wind','radiation','CO','NO','N02','0_3','HC')
+
+n <- length(X[,1])
+r <- length(X[1,])
+```
+
+(1.b) Determine the proportion of total sample variance due to the first sample principale component.
+
+```{r}
+# Compute sample mean and S
+Ones <- rep(1,n)
+x_sample_mean <- 1/n * t(X)%*%Ones
+S <- 1/(n-1) * t(X - Ones%*%t(x_sample_mean))%*%(X - Ones%*%t(x_sample_mean))
+
+# eigens
+ev <- eigen(S)
+eigen_values <- ev$values
+V <- ev$vectors
+
+k <- 3
+SS <- sum(diag((S)))
+LL <- sum(eigen_values[1:k])
+cat( fractions(LL/SS), '=', LL, '/', SS)
+```
+
+```{r}
+# We can see the loadings in V
+V
+```
+
+(1.e) Repeat with the data standarized. Aka, use R instead of S for the analysis.
+
+```{r}
+# Com
+R <- cor(X)
+
+# eigens
+ev_z <- eigen(R)
+eigen_values_z <- ev_z$values
+V_z <- ev_z$vectors
+
+k <- 3
+RR <- sum(diag((R)))
+LL_r <- sum(eigen_values_z[1:k])
+cat( fractions(LL_r/RR), '=', LL_r, '/', RR, fill=TRUE)
+
+# We can see the loadings in V
+eigen_values_z
+V_z
+```

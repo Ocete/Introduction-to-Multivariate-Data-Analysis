@@ -1,0 +1,83 @@
+---
+title: "hw6 p1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+For fractions:
+```{r}
+library(MASS)
+```
+
+## R Markdown
+
+```{r}
+# Com
+X <- cbind(c(2,2,2,0,-1,-2,-3),c(2,4,6,0,-4,-4,-4))
+colnames(X) <- NULL
+n <- dim(X)[1]
+r <- dim(X)[2]
+```
+
+(1.b) Determine the proportion of total sample variance due to the first sample principale component.
+
+```{r}
+# Compute sample mean and S
+Ones <- rep(1,n)
+x_sample_mean <- 1/n * t(X)%*%Ones
+S <- 1/(n-1) * t(X - Ones%*%t(x_sample_mean))%*%(X - Ones%*%t(x_sample_mean))
+
+# eigens
+ev <- eigen(S)
+eigen_values <- ev$values
+V <- ev$vectors
+
+prop <- eigen_values[1]/(S[1,1] + S[2,2])
+cat( fractions(prop), '=', eigen_values[1], '/', (S[1,1] + S[2,2]))
+```
+
+(1.c) Compare the contributions of the two variates to the determination of the first sample principal com-ponent based on loadings.
+
+```{r}
+# We can see the loadings in V
+V
+```
+
+(1.d) Compare the contributions of the two variates to the determination of the first sample principal com-ponent based on sample correlations.
+
+```{r}
+# Compute the correlations
+cat('Corr(Y_1, X_1) =', V[1,1]*sqrt(eigen_values[1]/S[1,1]))
+cat(' --- Corr(Y_1, X_2) =', V[2,1]*sqrt(eigen_values[1]/S[2,2]))
+```
+
+(1.e) Repeat (a-d) with the data standarized.
+
+```{r}
+# Com
+D <- cbind(c(1/sqrt(S[1,1]),0),c(0,1/sqrt(S[2,2])))
+Z <- (X - Ones%*%t(x_sample_mean))%*%t(D)
+colnames(Z) <- NULL
+
+# Compute sample mean and S
+z_sample_mean <- 1/n * t(Z)%*%Ones
+S_z <- 1/(n-1) * t(Z - Ones%*%t(z_sample_mean))%*%(Z - Ones%*%t(z_sample_mean))
+
+# eigens
+ev_z <- eigen(S_z)
+eigen_values_z <- ev_z$values
+V_z <- ev_z$vectors
+
+prop_z <- eigen_values_z[1]/(S_z[1,1] + S_z[2,2])
+cat( fractions(prop_z), '=', eigen_values_z[1], '/', (S_z[1,1] + S_z[2,2]))
+
+# We can see the loadings in V
+V_z
+
+# Compute the correlations
+cat('Corr(Y_1, Z_1) =', V_z[1,1]*sqrt(eigen_values_z[1]))
+cat(' --- Corr(Y_1, Z_2) =', V_z[2,1]*sqrt(eigen_values_z[1]))
+```
