@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 For fractions:
 ```{r}
 library(MASS)
+options(digits=4)
 ```
 
 ## R Markdown
@@ -55,7 +56,7 @@ beta_hat
 
 ```{r}
 # R^2 statistic
-R_square <- 1 - sum((Y - Z%*%beta_hat)^2)/sum((Y-mean(Y))^2)
+R_square <- sum((Y - Z%*%beta_hat)^2)/sum((Y-mean(Y))^2)
 R_square
 ```
 
@@ -140,19 +141,21 @@ C <- cbind(rep(0,p), diag(p))
 df_1 <- qr(C)$rank # df_1: rank of matrix R
 
 f_stat <- t(C%*%beta_hat)%*%solve(C%*%solve(t(Z)%*%Z)%*%t(C))%*%(C%*%beta_hat)
-f_stat
 
 cval_f <- sigma_hat_square*df_1*qf(1-alpha, 2, n-p-1)
-cval_f
+
+cat (f_stat, '<', cval_f, '?', fill=TRUE)
 
 # (equivalent) F-test by comparing residuals
 
 # fit the reduced model
 beta_hat_reduced <- solve(t(Z[,1])%*%Z[,1])%*%t(Z[,1])%*%Y
-beta_hat_reduced
 
-f_stat_reduced <- ((sum((Y - Z[,1]%*%beta_hat_reduced)^2) - sum((Y - Z%*%beta_hat)^2))/2)/sigma_hat_square
-f_stat_reduced
+f_stat_reduced <- ((sum((Y - Z[,1]%*%beta_hat_reduced)^2) - sum((Y - Z%*%beta_hat)^2))/2)
+
+cat (f_stat_reduced, '<', cval_f, '?', fill=TRUE)
+
+
 ```
 
 (8) 95% confidence interval for the mean response given z_0
