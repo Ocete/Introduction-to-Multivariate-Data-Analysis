@@ -59,12 +59,12 @@
 	For this first analysis, I've selected the Battery Failure dataset. In this example, we want to predict the cycles of life of a certain battery before it fails. We are provided the following variables: Charge rate (amps), discharge rate (amps), depth of discharge (\% of rated ampere-hours), temperature (ºC), and end of charge voltage (volts). These are the first three rows of data: 
 	
 	\begin{table}[H] \centering
-		\begin{tabular}{cccccc}
-			$Z_1$                                                         & $Z\_2$                                                             & $Z\_3$                                                                                           & $Z\_4$                                                        & $Z\_5$                                                                           & Y                                                            \\
-			\begin{tabular}[c]{@{}c@{}}Charge rate \\ (amps)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Discharge Rate\\  (amps)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Depth of \\ Discharge \\ (\% of rated \\ ampere-hours)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Temperature\\  (ºC)\end{tabular} & \begin{tabular}[c]{@{}c@{}}End of \\ Charge \\ Voltage \\ (volts)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Cicles to \\ failure\end{tabular} \\ \hline
-			0.375                                                         & 3.13                                                             & 60.0                                                                                           & 40                                                          & 2.00                                                                           & 101                                                          \\
-			1.000                                                         & 3.13                                                             & 76.8                                                                                           & 30                                                          & 1.99                                                                           & 141                                                          \\
-			1.000                                                         & 3.13                                                             & 60.0                                                                                           & 20                                                          & 2.00                                                                           & 96                                                          
+		\begin{tabular}{|cccccc|}
+			\hline
+			\begin{tabular}[c]{@{}c@{}}Charge rate\\  (amps)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Discharge Rate\\ (amps)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Depth of \\ Discharge\\ (\% of rated\\ ampere-hours)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Temperature\\ (ºC)\end{tabular} & \begin{tabular}[c]{@{}c@{}}End of\\ Charge\\ Voltage\\ (volts)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Cicles to\\ failure\end{tabular} \\ \hline
+			0.375                                                         & 3.13                                                            & 60.0                                                                                         & 40                                                         & 2.00                                                                        & 101                                                         \\
+			1.000                                                         & 3.13                                                            & 76.8                                                                                         & 30                                                         & 1.99                                                                        & 141                                                         \\
+			1.000                                                         & 3.13                                                            & 60.0                                                                                         & 20                                                         & 2.00                                                                        & 96                                                          \\ \hline
 		\end{tabular}
 	\end{table}
 	
@@ -234,7 +234,7 @@
 	
 	A substantialy bigger interval than the over in \textbf{(8)}, which makes sense since we are including the error now.
 	
-	\section{Two-Sample test and LDA}
+	\section{Principal Component Analysis}
 	
 	\subsection{Introduction}
 	Briefly summarize the goal of the analysis in your own words
@@ -243,13 +243,88 @@
 	\subsection{Analysis}
 	Implement the analysis based on what you have done in homework
 	
-	\section{PCA}
+	
+	\section{Two-Sample test and Linear Discriminant Analysis}
 	
 	\subsection{Introduction}
-	Briefly summarize the goal of the analysis in your own words
+	
+	For this final analysis we will conduct Linear Discriminant Analysis. That is, given enough data about tagged as two different classes, classify a new reponse into one of this classes. In order to do that we first need to conduct a two sample test to make sure that our populations are actually different.
+	
 	\subsection{Summary}
-	Summarize your data by plots or sample estimates
+	
+	The dataset selection for this example was a little trickier since I wanted to display nice graphs about the data. In order to achieve this the more convinient way was to pick up a two-variate dataset with a nice visual separation between its classes. We will see why in the analysis. \\
+	
+	The dataset selected was the Anaconda one. It has two variates: Snout vent length and weight. The class we want to predict is the snake gender: either male (M) or female (F). These are the first 5 rows of our dataset from each class:
+	
+	\begin{table}[H] \centering
+		\begin{tabular}{|ccc|ccc|}
+			\hline
+			Snout Vent Length & Weight & Gender & Snout Vent Length & Weight & Gender \\ \hline
+			271.0             & 18.50  & F      & 176.7             & 3.00   & M      \\
+			477.0             & 82.50  & F      & 259.5             & 9.75   & M      \\
+			306.3             & 23.40  & F      & 258.0             & 10.07  & M      \\
+			365.3             & 33.50  & F      & 229.8             & 7.50   & M      \\
+			466.0             & 69.00  & F      & 233.0             & 6.25   & M      \\
+			440.7             & 54.00  & F      & 237.5             & 9.85   & M      \\ \hline
+		\end{tabular}
+	\end{table}
+	
+	Our dataset is completely balanced, having the same number of males than females.
+	
 	\subsection{Analysis}
-	Implement the analysis based on what you have done in homework
+	
+	As stated in the introduction we start by conduction a two sample test with the null hypothesis $H_0: \mu_1 = \mu_2$. We start by extracting the basic stats from the data and computing the Hotelling's $T^2$ statistic:
+	
+	$$ \bar{\vec{x_1}} = 
+	\begin{pmatrix}
+	348.28  \\         
+	37.26
+	\end{pmatrix} 
+	, \bar{\vec{x_2}} = 
+	\begin{pmatrix}
+	228.75  \\         
+	7.29
+	\end{pmatrix} 
+	$$
+	
+	$$ S_{pooled} = 
+	\begin{pmatrix}
+		\multicolumn{1}{c}{2606.4} & \multicolumn{1}{c}{667.9} \\
+		667.9                      & 204.2                    
+	\end{pmatrix} 
+	$$ 
+	
+	$$ T^2 = (\bar{\vec{x_1}} - \bar{\vec{x_2}})^T ((\frac{1}{n_1} + \frac{1}{n_2}) S_{pooled})^{-1} (\bar{\vec{x_1}} - \bar{\vec{x_2}}) = 76.92 $$ 
+	
+	We compare this value to:
+	
+	$$ F = \frac{(n_1 + n_2 - 2)p}{n_1+n_2-1-p} \cdot F_{p, n_1+n_2-1-p}(\alpha) = 6.463 $$
+	
+	Since $76.92 > 6.463$, we reject $H_0$, concluding that both population are, indeed, different. We can now procede with linear discrimination analysis. For a given new response $\vec{x_0}$ we will classify it in the first population if and only if:
+	
+	$$ (\bar{\vec{x_1}} - \bar{\vec{x_2}})^T \cdot S_{pooled}^{-1} \cdot (\vec{x_0} - \frac{1}{2}(\bar{\vec{x_1}} - \bar{\vec{x_2}})) \ge 0 $$
+	
+	That is, if and only if:
+	
+	$$ 0.05095 - 0.01986 \cdot (\vec{x_0} - \begin{pmatrix}
+	288.5 \\
+	22.28
+	\end{pmatrix} ) \ge 0 $$
+	
+	In order to meassure how good this classifier is we use two methods:
+	
+	\begin{itemize}
+		\item The Apparent Error Rate (AER): Try to predict every single sample by training the model with every point in the dataset (including the one we will predict), and the use it for the prediction.
+		\item The Expected Actual Error Rate (EAER): Using the same tachnique but exclude the point that we will predict from the train set.
+	\end{itemize}
+
+	In this case we obtain the same value for both measures: a $0.08929 = \frac{5}{56}$ error rate, missing 5 samples. Finally, let's plot our populations and their respective mean-cenetered mahalanobis-distance elipses:
+	
+	\begin{figure}[H] 
+		\centering
+		\includegraphics[scale=.9]{./pics/LDA}
+		%\caption{my-captino} \label{my-label}
+	\end{figure}
+	
 	
 \end{document}

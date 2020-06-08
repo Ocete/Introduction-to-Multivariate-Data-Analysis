@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 For fractions:
 ```{r}
 library(MASS)
+options(digits=4)
 ```
 
 ```{r}
@@ -56,7 +57,7 @@ hotelling_test<-function(X_1, X_2, alpha=0.05, print=FALSE) {
   S1 <- sampleCovariance(X_1, n1, x1_sample_mean)
   S2 <- sampleCovariance(X_2, n2, x2_sample_mean)
   Spooled <- (n1-1)/(n1+n2-2) * S1 + (n2-1)/(n1+n2-2) * S2
-
+  
   # Compute Hotelling's T^2 statistic
   diff <- x1_sample_mean - x2_sample_mean
   T_2 <- t(diff)%*%solve((1/n1 + 1/n2)*Spooled)%*%diff
@@ -71,7 +72,7 @@ hotelling_test<-function(X_1, X_2, alpha=0.05, print=FALSE) {
 }
 
 reject <- hotelling_test(X_1, X_2, alpha=0.05, print=TRUE)
-cat('H_0: u_1 = u2. Hypothesis rejected? --->', reject)
+cat('H_0: u_1 = u_2. Hypothesis rejected? --->', reject)
 
 ```
 
