@@ -1,7 +1,9 @@
 ---
-title: "Final project: PCA"
+title: 'Final project: PCA'
 author: "Jose Antonio Alvarez Ocete"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}

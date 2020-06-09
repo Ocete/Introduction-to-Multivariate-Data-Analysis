@@ -1,7 +1,9 @@
 ---
-title: "Final project: Regression"
+title: 'Final project: Regression'
 author: "Jose Antonio Alvarez Ocete"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 
@@ -183,30 +185,4 @@ cat('Prediction interval for Y_0 = z_0^T beta + epsilon_0: [',
   ',',
   t(z_0)%*%beta_hat + sqrt(sigma_hat_square)*sqrt(1+t(z_0)%*%solve(t(Z)%*%Z)%*%z_0)*qt(1-alpha/2, n-p-1),
   ']')
-```
-
-NOT USED:
-
-```{r}
-# Confidence Region for (beta_1, beta_2)^T
-
-center <- beta_hat[2:3]
-es<-eigen(R%*%solve(t(Z)%*%Z)%*%t(R))
-e1<-es$vec %*% diag(sqrt(es$val))
-r1<-sqrt(df_1*cval_f*sigma_hat_square)
-theta<-seq(0,2*pi,len=250)
-v1<-cbind(r1*cos(theta), r1*sin(theta))
-pts<-t(center - (e1%*%t(v1)))
-plot(pts,type="l",main="Confidence Region for (beta_1, beta_2)^T",xlab="beta_1",ylab="beta_2",asp=1,
-     xlim = c(-0.3,0.1),ylim=c(-0.1,0.04))
-segments(0,center[2],center[1],center[2],lty=2) # highlight the center
-segments(center[1],0,center[1],center[2],lty=2)
-arrows(-0.3,0,0.1,0)
-arrows(0,-0.1,0,0.05)
-
-th2<-c(0,pi/2,pi,3*pi/2,2*pi)   #adding the axis
-v2<-cbind(r1*cos(th2), r1*sin(th2))
-pts2<-t(center-(e1%*%t(v2)))
-segments(pts2[3,1],pts2[3,2],pts2[1,1],pts2[1,2],lty=3)  
-segments(pts2[2,1],pts2[2,2],pts2[4,1],pts2[4,2],lty=3)
 ```
