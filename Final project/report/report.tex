@@ -237,11 +237,162 @@
 	\section{Principal Component Analysis}
 	
 	\subsection{Introduction}
-	Briefly summarize the goal of the analysis in your own words
+	
+	For the second analysis we will conduct Principal Component Analysis on our dataset. Ourmain objectives will be to analyze the explained variance against the numbers of principal components in order to reduce the dimensionality of our dataset, as well as study how standarizing the data would affect these parameters.
+	
 	\subsection{Summary}
-	Summarize your data by plots or sample estimates
+	
+	In order to achieve those objetives we need to select a dataset relatively hihg dimensionality, at least compare to the rest of the datasets in the book, that will also yield different results upon standarizing the data. In order to fullfill this criteria I selected the Breakfast Cereal dataset. \\
+	
+	We this dataset we aim to distinguish cereals from three different manufacturers: General Mills (G), Kellogg (K), and Quaker (Q); by looking at 8 variates: Calories, Protein, Fat, Sodium, Fiber, Carbohydrates, Sugar, and Potassium. These are the first 3 rows of each manufacturer:
+	
+	\begin{table}[H] \centering
+		\begin{tabular}{|l|llllllll|}
+			\hline
+			\multicolumn{1}{|c|}{Manufacturer} & \multicolumn{1}{c}{Calories} & Protein & Fat & Sodium & Fiber & Carbohydrates & Sugar & Potassium \\ \hline
+			G                                  & 110                          & 2       & 2   & 180    & 1.5   & 10.5          & 10    & 1         \\
+			G                                  & 110                          & 6       & 2   & 290    & 2.0   & 17.0          & 1     & 1         \\
+			G                                  & 110                          & 1       & 1   & 180    & 0.0   & 12.0          & 13    & 55        \\
+			K                                  & 70                           & 4       & 1   & 260    & 9.0   & 7.0           & 5     & 320       \\
+			K                                  & 110                          & 2       & 0   & 125    & 1.0   & 11.0          & 14    & 30        \\
+			K                                  & 100                          & 2       & 0   & 290    & 1.0   & 21.0          & 2     & 35        \\
+			Q                                  & 120                          & 1       & 2   & 220    & 0.0   & 12.0          & 12    & 35        \\
+			Q                                  & 120                          & 1       & 2   & 220    & 1.0   & 12.0          & 11    & 45        \\
+			Q                                  & 100                          & 4       & 2   & 150    & 2.0   & 12.0          & 6     & 95        \\ \hline
+		\end{tabular}
+	\end{table}
+
+	Although our data is quite unbalanced class-wise, this doesn't affect our PCA analysis.
+	
 	\subsection{Analysis}
-	Implement the analysis based on what you have done in homework
+	
+	We start by computing basic stats of our data:
+	
+	
+	$$ \bar{\vec{x}} = 
+	\begin{pmatrix}
+		107.9070 \\
+		2.4651   \\
+		0.9767   \\
+		180.4651 \\
+		1.7140   \\
+		10.2093  \\
+		7.6047   \\
+		84.4186 
+	\end{pmatrix}
+	$$
+	
+	$$ S = 
+	\begin{pmatrix}
+		359.80 & 0.76  & 5.90  & 505.76  & -0.66  & 11.40  & 49.87  & 177  \\
+		0.76   & 1.49  & 0.20  & 9.06    & 1.13   & 0.47   & -2.22  & 40   \\
+		5.90   & 0.20  & 0.64  & 0.61    & 0.24   & -1.16  & 0.68   & 17   \\
+		505.76 & 9.06  & 0.61  & 6274.78 & 6.18   & 182.28 & -17.55 & 599  \\
+		-0.66  & 1.13  & 0.24  & 6.18    & 3.24   & 0.92   & -0.28  & 110  \\
+		11.40  & 0.47  & -1.16 & 182.28  & 0.92   & 20.88  & -5.30  & 20   \\
+		49.87  & -2.22 & 0.68  & -17.55  & -0.28  & -5.30  & 20.58  & 24   \\
+		177.33 & 40.40 & 16.53 & 599.09  & 110.48 & 19.53  & 24.41  & 4370                 
+	\end{pmatrix} 
+	$$ 
+	
+	In order to run PCA we compute the spectral decomposition of $S$:
+	
+	$ S = V \Lambda V^T$
+	
+	Where:
+	
+	$$ V = 
+	\begin{pmatrix}
+		-0.087 & 0.008  & 0.982  & 0.104  & 0.124  & 0.020  & -0.035 & 0.000  \\
+		-0.003 & 0.009  & -0.005 & 0.079  & 0.197  & -0.930 & 0.276  & 0.117  \\
+		-0.001 & 0.004  & 0.017  & -0.042 & 0.096  & 0.184  & 0.802  & -0.558 \\
+		-0.957 & -0.279 & -0.079 & -0.034 & 0.004  & -0.001 & -0.001 & -0.001 \\
+		-0.006 & 0.025  & -0.015 & 0.035  & -0.021 & -0.255 & -0.508 & -0.821 \\
+		-0.028 & -0.008 & -0.016 & 0.824  & -0.555 & -0.017 & 0.106  & -0.011 \\
+		0.001  & 0.007  & 0.165  & -0.547 & -0.793 & -0.187 & 0.100  & -0.009 \\
+		-0.277 & 0.960  & -0.032 & -0.002 & 0.000  & 0.015  & 0.008  & 0.022 
+	\end{pmatrix} 
+	$$ 
+	
+	$$ \Lambda = 
+	\begin{pmatrix}
+		6499.572 & 0        & 0       & 0      & 0     & 0     & 0     & 0     \\
+		0        & 4201.334 & 0       & 0      & 0     & 0     & 0     & 0     \\
+		0        & 0        & 321.556 & 0      & 0     & 0     & 0     & 0     \\
+		0        & 0        & 0       & 18.435 & 0     & 0     & 0     & 0     \\
+		0        & 0        & 0       & 0      & 9.642 & 0     & 0     & 0     \\
+		0        & 0        & 0       & 0      & 0     & 0.677 & 0     & 0     \\
+		0        & 0        & 0       & 0      & 0     & 0     & 0.397 & 0     \\
+		0        & 0        & 0       & 0      & 0     & 0     & 0     & 0.287
+	\end{pmatrix} 
+	$$ 
+	
+	As we can see, our first two eigen values are way larger than the rest. By looking at the loading in $V$ we can see how these first two principal components are essetially the first and sixth variable respectively. Selecting the first two principal components from this analysis isn't much different from selecting those two variables. As we will see, they explain the variance pretty well, but that's only because the data is not standarized and the scale makes a huge different. Using the following result:
+	
+	$$ \sum_{i=1}^{n} \lambda_i = \sum_{i=1}^{n} \sigma_i^2 $$
+	
+	We can compute the ratio of explained variance by the first two principal components:
+	
+	$$ Explained \ variance = \frac{\lambda_1 + \lambda_2}{\sum_{i=1}^{n} \lambda_i} = 0.968 $$
+	
+	Let's study now how our data behaves if it's standarized. we obtain the spectral decomposition of the correlation matrix, which is the covariance matrix of the standarized data, and obtain the following:
+	
+	 $$ V_z = 
+	 \begin{pmatrix}
+		 -0.161 & -0.540 & -0.370 & 0.13  & 0.45  & -0.040 & 0.562  & -0.069 \\
+		-0.454 & 0.233  & 0.093  & 0.41  & 0.57  & 0.323  & -0.375 & 0.013  \\
+		-0.261 & -0.409 & 0.182  & 0.58  & -0.37 & -0.453 & -0.221 & -0.071 \\
+		-0.167 & 0.012  & -0.640 & 0.18  & -0.50 & 0.518  & -0.063 & -0.053 \\
+		-0.561 & 0.096  & 0.145  & -0.38 & -0.12 & -0.041 & 0.123  & -0.694 \\
+		-0.114 & 0.284  & -0.615 & -0.15 & 0.16  & -0.624 & -0.298 & 0.043  \\
+		0.032  & -0.630 & -0.040 & -0.44 & 0.12  & 0.170  & -0.602 & -0.016 \\
+		-0.586 & -0.034 & 0.110  & -0.29 & -0.16 & -0.015 & 0.159  & 0.710 
+	 \end{pmatrix} 
+	 $$ 
+	 
+	 $$ \Lambda_z = 
+	 \begin{pmatrix}
+		2.49  & 0        & 0       & 0      & 0     & 0     & 0     & 0     \\
+		0        & 1.89 & 0       & 0      & 0     & 0     & 0     & 0     \\
+		0        & 0        & 1.63 & 0      & 0     & 0     & 0     & 0     \\
+		0        & 0        & 0       & 0.91 & 0     & 0     & 0     & 0     \\
+		0        & 0        & 0       & 0      & 0.50 & 0     & 0     & 0     \\
+		0        & 0        & 0       & 0      & 0     &0.39 & 0     & 0     \\
+		0        & 0        & 0       & 0      & 0     & 0     & 0.13 & 0     \\
+		0        & 0        & 0       & 0      & 0     & 0     & 0     & 0.05
+	 \end{pmatrix} 
+	 $$ 
+	 
+	 As we can see, the eigen values are now much more closer to each other, and the loadings are way more balanced. 
+	 
+	 \begin{figure}[H] 
+	 	\centering
+	 	\includegraphics[scale=.9]{./pics/PCA1}
+	 	\caption{Portion of explained variance comparison} \label{variance-label}
+	 \end{figure}
+	
+	In \ref{variance-label} we see how the growth of the proportion of variance explained with the standarized data is much more progresive. As we hypothesized before, with the non-standarized analysis we were using certain variables just because their variance was bigger. Now ous principal components use information for more variates, gaining more information of the whole dataset with fewer of them. \\
+	
+	For the rest of the anaylsis let's stick to the first two principal components. Let's transform our data using them and plot it:
+	
+	\begin{figure}[H] 
+		\centering
+		\includegraphics[scale=.9]{./pics/PCA2}
+		\caption{Portion of explained variance comparison} \label{Y-dataset-label}
+	\end{figure}
+	
+	We can see how our classes are not clearly separated, but that's not the main point of PCA. However the points are fairly spread out. After all, we are only explaining $55\%$ of our variance with the first two principal components. Finally, let's study how each variate contributes to these PCs. In order to do this we look at the loading of these PCs: studying only the first two columns of $V_z$ (our first two PCs), and plotting their rows we can see the variate contributions. \\
+	
+	In \ref{contributions-label} see each variate contribution as a colored vector. The bigger the vector, the greater the contribution, while the direction shows towards which principal component it contributes and wether it's a direct or inverse contribution. \\
+	
+	We can see how the variates $X_4$ and $X_6$ contribute the least to the first two principal components. On one hand, $X_1$ and $X_7$ contribute mostly to the first PC, $Y_1$. On the other hand, $X_5$ and $X_8$ contribute mostly to $Y_2$. Finally, $X_2$ and $X_3$ contribute to greatly to both PCs but in very different ways.
+	
+	\begin{figure}[H] 
+		\centering
+		\includegraphics[scale=.9]{./pics/PCA3}
+		\caption{Portion of explained variance comparison} \label{contributions-label}
+	\end{figure}
+
 	
 	
 	\section{Two-Sample test and Linear Discriminant Analysis}

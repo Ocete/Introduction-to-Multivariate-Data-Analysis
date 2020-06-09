@@ -185,9 +185,7 @@ ellipse(x2.mean, var(x2), alpha=alpha, npoints=250, newplot=FALSE)
 points(c(x2.mean[1],x1.mean[1]), c(x2.mean[2],x1.mean[2]), type='b', col='green')
 mid <- (x1.mean + x2.mean)/2
 
-new_w <- -1000*w + mid
-new_w_ort <- -1000*c(-w[2], w[1]) + mid
+new_w <- 1000*w + mid
 
 points(c(new_w[1], mid[1]), c(new_w[2], mid[2]), type='b', col='orange')
-points(c(new_w_ort[1], mid[1]), c(new_w_ort[2], mid[2]), type='b', col='red')
 ```

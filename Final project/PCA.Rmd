@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 For fractions:
 ```{r}
 library(MASS)
+options(digits=2)
 ```
 
 ```{r}
@@ -33,7 +34,7 @@ plotProportions<-function(eigen_values, print=FALSE) {
   props <- c(0)
   RR <- sum(eigen_values)
   
-  for (k in 1:(r+1)) {
+  for (k in 1:(r)) {
     ks <- c(ks, k)
     LL_r <- sum(eigen_values[1:k])
     props <- c(props, LL_r/RR)
@@ -77,7 +78,7 @@ plotProportionsTogether<-function(eigen_values, eigen_values_z) {
     props_z <- c(props_z, LL_r_z/RR_z)
   }
 
-  plot(ks, props, col="red", type="b", xlab = 'Number of PCs used', ylab = 'Proportion of variance', xlim=c(0,r))
+  plot(ks, props, col="red", type="b", xlab = 'Number of PCs used', ylab = 'Proportion of variance explained', xlim=c(0,r))
   grid()
   points(ks, props_z, type="b", col="blue")
   legend('bottomright', title='Data', legend=c('Non-standarized', 'Standarized'),
@@ -92,13 +93,14 @@ ev_z <- eigen(R)
 eigen_values_z <- ev_z$values
 V_z <- ev_z$vectors
 
-plotProportions(eigen_values_z, print=TRUE)
+#plotProportions(eigen_values_z, print=TRUE)
 plotProportionsTogether(eigen_values, eigen_values_z)
 ```
 
 Plot PCs contributions 
 ```{r}
 color <- c('red', 'blue', 'green', 'yellow', 'orange', 'purple', 'light blue', 'black')
+par(pty="s")
 
 for (i in 1:r) {
   vector_X <- c(0, V_z[i,1])
@@ -110,8 +112,9 @@ for (i in 1:r) {
     lines(vector_X, vector_Y, type='b', col=color[i])
 }
 points(c(0), c(0))
-legend(-1, 1, legend=c('X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8'),
+legend("topright", legend=c('X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8'),
        col=color, lty=1, title="Variates")
+
 grid()
 ```
 
@@ -122,12 +125,16 @@ Y_scores <- X %*% V_z[,1:2]
 
 #replace(classes, rep(length(classes)), c(rep('red',17), rep('blue',20), rep('green', 6)))
 plot(Y_scores[,1], Y_scores[,2], xlab='Y_1', ylab='Y_2', col=classes)
+legend("topleft", legend=c('General Mills (G)', 'Kellogs (K)', 'Quaker (Q)'),
+       col=c('red', 'black', 'green'), pch='o', lty=0, title="Classes")
 grid()
 ```
 
 Plot eigen values
 
 ```{r}
-plot(rep(1:r), eigen_values, type='b', col='red', xlab='Eigen-value number', ylab='Eigen-value value')
-plot(rep(1:r), eigen_values_z, type='b', col='blue', xlab='Eigen-value number', ylab='Eigen-value value')
+plot(rep(1:r), eigen_values, type='b', col='red', xlab='Eigen-value index', ylab='Eigen-value')
+grid()
+plot(rep(1:r), eigen_values_z, type='b', col='blue', xlab='Eigen-value index', ylab='Eigen-value')
+grid()
 ```

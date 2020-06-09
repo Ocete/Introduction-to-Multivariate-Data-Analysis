@@ -7,7 +7,7 @@
 \contentsline {subsection}{\numberline {2.1}Introduction}{6}{subsection.2.1}%
 \contentsline {subsection}{\numberline {2.2}Summary}{6}{subsection.2.2}%
 \contentsline {subsection}{\numberline {2.3}Analysis}{6}{subsection.2.3}%
-\contentsline {section}{\numberline {3}Two-Sample test and Linear Discriminant Analysis}{6}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Introduction}{6}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Summary}{6}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Analysis}{7}{subsection.3.3}%
+\contentsline {section}{\numberline {3}Two-Sample test and Linear Discriminant Analysis}{10}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Introduction}{10}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Summary}{10}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Analysis}{11}{subsection.3.3}%
