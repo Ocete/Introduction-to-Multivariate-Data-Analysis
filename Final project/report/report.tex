@@ -318,13 +318,25 @@
 		\item The Expected Actual Error Rate (EAER): Using the same tachnique but exclude the point that we will predict from the train set.
 	\end{itemize}
 
-	In this case we obtain the same value for both measures: a $0.08929 = \frac{5}{56}$ error rate, missing 5 samples. Finally, let's plot our populations and their respective mean-cenetered mahalanobis-distance elipses:
+	In this case we obtain the same value for both measures: a $0.08929 = \frac{5}{56}$ error rate, missing 5 samples. Finally, let's plot our populations and their respective mean-centered mahalanobis-distance elipses to gain a geometry perspective of what is going on here:
 	
 	\begin{figure}[H] 
 		\centering
 		\includegraphics[scale=.9]{./pics/LDA}
-		%\caption{my-captino} \label{my-label}
+		\caption{Anaconda dataset partition} \label{anaconda-label}
 	\end{figure}
 	
+	In this figure we can see the two different classes in red (female) and blue (male). We have also plotted each population mean-centered elipse and a green line joining their centers. We can rewrite our test using the following: $\vec{x_0}$ will be classified as Female (class 1) if and only if:
+	
+	$$ \vec{\omega}^T \cdot \vec{\omega}_0 \ge 0 $$
+	
+	Where:
+	
+	$$ \vec{\omega} = (\bar{\vec{x_1}} - \bar{\vec{x_2}})^T \cdot S_{pooled}^{-1} $$
+	$$ \vec{\omega}_0 = (\vec{x_0} - \frac{1}{2}(\bar{\vec{x_1}} - \bar{\vec{x_2}})) $$
+	
+	What we are computing here is the cosine of the angle between $\vec{\omega}$ and $\vec{\omega}_0$. If the absolute value of the angle is less than 90º, the cosine will be positive, so we are just studying this angel. In \ref{anaconda-label}, we plot $\vec{\omega}$ in orange, while $\vec{\omega}_0$ will be a vector from the middle point of the green segment to the given new responde $\vec{x_0}$. \\
+	
+	The easiest way to see this geometrically is to plot a perpendicular line to $\vec{\omega}$. This is the black line (although it doesn't seem perpendicular, this is because of the different scale in the axis). If the point is on the right side of the line, $\vec{\omega}_0$ and $\vec{\omega}$ will create an angle smaller than 90º, classifying $\vec{x_0}$ as Female, while if the point is on the left side of the line, $\vec{\omega}_0$ and $\vec{\omega}$ will create an angle greater than 90º, classifying $\vec{x_0}$ as Male.
 	
 \end{document}

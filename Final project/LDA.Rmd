@@ -157,9 +157,9 @@ cat( fractions(EAER), '=', errors, '/', (n1+n2))
 #library(rrcov)
 library(mixtools)
 par(mfrow=c(1,1), mar=c(4,4,2,1))
-plot(data$V1,data$V2,xlab=names[1],ylab=names[2],
-     pch=rep(c(18,20),each=28),col=rep(c(2,4),each=28),main="")
-legend("topright",legend=c("Female","Male"), pch=c(18,20), col=c(2,4),cex=1)
+plot(data$V1,data$V2, xlab=names[1] ,ylab=names[2],
+     pch=rep(c(18,20),each=28), col=rep(c(2,4), each=28), main="")
+legend("topleft", legend=c("Female","Male"), pch=c(18,20), col=c(2,4), cex=1)
 
 # Method 1
 x1 <- X_1
@@ -174,10 +174,8 @@ S.u <- (n1-1)/(n1+n2-2) * var(x1) + (n2-1)/(n1+n2-2) * var(x2)
 w <- solve(S.u)%*%(x1.mean-x2.mean)
 w0 <- -(x1.mean+x2.mean)%*%w/2
 
-lines(data[,1],-(w[1]*data[,1]+w0)/w[2])
-
+lines(data[,1],-(w[1]*data[,1]+c(w0))/w[2])
 lines(cbind(x1.mean, x2.mean))
-
 
 alpha <- .05
 ellipse(x1.mean, var(x1), alpha=alpha, npoints=250, newplot=FALSE)
@@ -186,5 +184,10 @@ ellipse(x2.mean, var(x2), alpha=alpha, npoints=250, newplot=FALSE)
 # Compute line between mean points and the line w
 points(c(x2.mean[1],x1.mean[1]), c(x2.mean[2],x1.mean[2]), type='b', col='green')
 mid <- (x1.mean + x2.mean)/2
-points(c(w[1], mid[1]), c(w[2], mid[2]), type='b', col='orange')
+
+new_w <- -1000*w + mid
+new_w_ort <- -1000*c(-w[2], w[1]) + mid
+
+points(c(new_w[1], mid[1]), c(new_w[2], mid[2]), type='b', col='orange')
+points(c(new_w_ort[1], mid[1]), c(new_w_ort[2], mid[2]), type='b', col='red')
 ```
